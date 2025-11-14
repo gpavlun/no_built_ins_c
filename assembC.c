@@ -17,10 +17,14 @@ void mul(int multiplicand,int multiplier,int *result);  //multiplies two values
 void div(int dividend,int divisor,int *result);         //badly divides two values
 /*character operations*/
 void setc(char *LHS,char RHS);                          //sets a variable to a character
-void itoa(int integer,char *character);                 //converts an int to a printatble form
+void i2a(int integer,char *character);                 //converts an int to a printatble form
+void a2i(char character,int *integer);
 void put_c(int value);                                //puts an ascii character on the command line
-void wrt_int(int value);                                
-void wrt_str(char *string);  
+void put_int(int value);                                
+void put_str(char *string);
+
+void get_c(char *dest); 
+void get_str(char *dest,int size);
 
 
 
@@ -28,16 +32,22 @@ void main(void){
     static int result;
     static int A;
     static int B;
-    static char cA;
-    wrt_str("\n=================\n");
-    wrt_str(" welcome to C--! \n");
-    wrt_str("=================\n\n");
+    static char c;
+    static char str[6];
+    put_str("\n=================\n");
+    put_str(" welcome to C--! \n");
+    put_str("=================\n\n");
 
     
-    put_c('5');
+    put_str("please enter a string size(single digit):");
+    get_c(&c);
+    a2i(c,&A);
+    put_int(A);
+/*
+    get_c(&cA);
+    put_c(cA);
     put_c('\n');
-    wrt_int(0x00478);
-    
+*/
 }
 
 
@@ -247,7 +257,6 @@ prints a single charcter to the commandline
 void put_c(int value){
     char c;
     setc(&c,value);
-
     asm(
         "mov $1, %%rax\n"
         "mov $1, %%rdi\n"
@@ -258,8 +267,6 @@ void put_c(int value){
         : "r"(&c)
         : "%rax", "%rdi", "%rsi", "%rdx"
     );
-
-
 }
 /*
 function setc
@@ -290,10 +297,10 @@ posset_loop:
 end:
 }
 /*
-function: itoa
+function: i2a
 converts an integer to an ascii version
 */
-void itoa(int integer,char *character){
+void i2a(int integer,char *character){
     int increment;
     setc(character,integer);
     set(&increment,0x30);
@@ -306,10 +313,10 @@ positive_inc:
 end: 
 }
 /*
-function: wrt_int
+function: put_int
 writes an entire integer to the command line in hexadecimal
 */
-void wrt_int(int value){
+void put_int(int value){
     char integer[8];
     char negative;
     static int index;
@@ -328,19 +335,67 @@ loop:
     index--;
     mul(index,4,&shift);
     setc(&(integer[index]),(value>>shift)&0xF);
-    itoa(integer[index],&(integer[index]));
+    i2a(integer[index],&(integer[index]));
     put_c(integer[index]);
     index ? ({goto loop;}) : 1;
     put_c('\n');
 }
 /*
-function: wrt_int
+function: put_int
 writes a string to the command line
 */
-void wrt_str(char *string){
+void put_str(char *string){
 loop:
     put_c(*string);
     string++;
     cmp(*string,'\0');
     cmp_value ? ({goto loop;}) : 1;
 }  
+/*
+function: get_c
+gets a value from the command line
+*/
+void get_c(char *dest){
+    asm(
+        "mov $0, %%rax\n"
+        "mov $1, %%rdi\n"
+        "mov %0, %%rsi\n"
+        "mov $1, %%rdx\n"
+        "syscall\n"
+        :
+        : "r"(dest)
+        : "%rax", "%rdi", "%rsi", "%rdx"
+    );
+}
+/*
+function: get_str
+reads string from command line
+*/
+void get_str(char *dest,int size){
+        asm(
+        "mov $0, %%rax\n"
+        "mov $1, %%rdi\n"
+        "mov %0, %%rsi\n"
+        "mov $6, %%rdx\n"
+        "syscall\n"
+        :
+        : "r"(dest),"r"(size)
+        : "%rax", "%rdi", "%rsi", "%rdx"
+    );
+}
+/*
+function: a2i
+converts ascii number to int
+*/
+void a2i(char character,int *integer){
+    int increment;
+    setc(integer,character);
+    set(&increment,0x30);
+positive_inc:
+    cmp(increment,0);
+    cmp_value ? 1 : ({goto end;});
+    (*integer)--;
+    increment--;
+    goto positive_inc;
+end: 
+}
