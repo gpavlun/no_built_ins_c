@@ -29,8 +29,10 @@ void main(void){
     static int A;
     static int B;
     static char cA;
-    
-    wrt_str("Welcome to C--!\n");
+    wrt_str("\n=================\n");
+    wrt_str(" welcome to C--! \n");
+    wrt_str("=================\n\n");
+
     
     put_c('5');
     put_c('\n');
