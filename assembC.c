@@ -78,7 +78,7 @@ end:
 function: neg
 Checks to see if value is negative, very
 useful to avoid the long bitwise string
-if it is negatibe, return a 1
+if it is negative, return a 1
 if it is positive, return a 0
 */
 void neg(int value){
@@ -100,6 +100,7 @@ cmp_value global variable.
 positive return value means A is greater than B,
 negative return value means A is lesser than B,
 zero return value means A is equal to B
+* note: "return" value is just the value stored in cmp_value
 */
 void cmp(int A,int B){
     neg(B);
