@@ -29,6 +29,8 @@ void main(void){
     static char cA;
 
     put_c('5');
+    put_c('\n');
+    wrt_int(0x00478);
 }
 
 
@@ -284,14 +286,27 @@ function: itoa
 converts an integer to an ascii version
 */
 void itoa(int integer,char *character){
-    add(integer,0x30,(int *)character);
+    int increment;
+    setc(character,integer);
+    set(&increment,0x30);
+positive_inc:
+    cmp(increment,0);
+    cmp_value ? 1 : ({goto end;});
+    (*character)++;
+    increment--;
+    goto positive_inc;
+end: 
 }
 /*
 function: wrt_int
-writes an entire integer to the command line
+writes an entire integer to the command line in hexadecimal
 */
 void wrt_int(int value){
+    char integer[8];
     char negative;
+    static int index;
+    static int shift;
+    set(&index,8);
     setc(&negative,0);
     neg(value);
     cmp_value ? 1 : ({goto start;});
@@ -299,16 +314,14 @@ void wrt_int(int value){
     inv(value,&value);
     put_c(0x2D);
 start:
-    int place;
-    int result;
-    char prt;
-    set(&place,1000000000);
-
-
-    div(value,place,&result);
-    itoa(result,&prt);
-    put_c(prt);
-    div(place,10,&place);
-    cmp(place, 0);
-
+    put_c('0');
+    put_c('x');
+loop:
+    index--;
+    mul(index,4,&shift);
+    setc(&(integer[index]),(value>>shift)&0xF);
+    itoa(integer[index],&(integer[index]));
+    put_c(integer[index]);
+    index ? ({goto loop;}) : 1;
+    put_c('\n');
 }
