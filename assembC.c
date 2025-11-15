@@ -33,16 +33,27 @@ void main(void){
     static int A;
     static int B;
     static char c;
-    static char str[6];
+    
     put_str("\n=================\n");
-    put_str(" welcome to C--! \n");
+    put_str(" welcome to G--! \n");
     put_str("=================\n\n");
 
-    
     put_str("please enter a string size(single digit):");
     get_c(&c);
     a2i(c,&A);
+
+
+    char str[A];
+    put_str("please enter a string with size ");
     put_int(A);
+    put_c(':');
+    get_str(&str,A);
+    put_str(&str);
+    put_c('\n');
+
+    
+    
+    
 /*
     get_c(&cA);
     put_c(cA);
@@ -338,7 +349,6 @@ loop:
     i2a(integer[index],&(integer[index]));
     put_c(integer[index]);
     index ? ({goto loop;}) : 1;
-    put_c('\n');
 }
 /*
 function: put_int
@@ -357,31 +367,46 @@ gets a value from the command line
 */
 void get_c(char *dest){
     asm(
-        "mov $0, %%rax\n"
-        "mov $1, %%rdi\n"
-        "mov %0, %%rsi\n"
-        "mov $1, %%rdx\n"
+        "movq $0, %%rax\n"
+        "movq $0, %%rdi\n"
+        "movq %0, %%rsi\n"
+        "movq $2, %%rdx\n"
         "syscall\n"
         :
         : "r"(dest)
         : "%rax", "%rdi", "%rsi", "%rdx"
     );
+    cmp(dest[0],'\n');
+    cmp_value ? 1 : ({goto end;});
+    cmp(dest[1],'\n');
+    cmp_value ? 1 : ({goto end;});    
+    err();
+    end:
 }
 /*
 function: get_str
 reads string from command line
 */
 void get_str(char *dest,int size){
+        size++;
         asm(
-        "mov $0, %%rax\n"
-        "mov $1, %%rdi\n"
-        "mov %0, %%rsi\n"
-        "mov $6, %%rdx\n"
+        "movq $0, %%rax\n"
+        "movq $0, %%rdi\n"
+        "movq %0, %%rsi\n"
+        "movq $6, %%rdx\n"
         "syscall\n"
-        :
-        : "r"(dest),"r"(size)
+        "movq %%rax, %%rbx\n"
+        : "=ri"(dest): "ri"(&size)
         : "%rax", "%rdi", "%rsi", "%rdx"
     );
+// loop:
+//     cmp(size,0);
+//     cmp_value ? 1 : err();
+//     size--;
+//     cmp(*dest,'\n');
+//     dest++;
+//     cmp_value ? ({goto loop;}) : 1;
+
 }
 /*
 function: a2i
