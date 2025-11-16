@@ -1,13 +1,26 @@
-# makefile for G-- programming language functions
-# hides warnings by default
-# but also includes option ("loud")
-# to display all of them
+# makefile for G--
+# Version: 1
+#
+# -Wall turns on all warning messages 
+#
 
-default: G--_Language.c
-	gcc -w -o assembC.exe G--_Language.c
+G--_Language :  Command_Calls.h Integer_Ops.o Character_Ops.o Input_Output.o G--_Language.o
+	gcc  Integer_Ops.o Character_Ops.o Input_Output.o G--_Language.o -o  G--_Language
 
-loud: G--_Language.c
-	gcc -Wall -o assembC.exe G--_Language.c
+Command_Calls.o : Command_Calls.o Command_Calls.h
+	gcc -c Command_Calls.c
 
-clean: *.exe
-	rm -f *.exe
+Integer_Ops.o :  Integer_Ops.c Integer_Ops.h
+	gcc -c  Integer_Ops.c
+
+Character_Ops.o :   Character_Ops.c   Character_Ops.h
+	gcc -c   Character_Ops.c
+
+Input_Output.o :  Input_Output.c Input_Output.h
+	gcc -c Input_Output.c
+
+ G--_Language.o :  G--_Language.c Command_Calls.h Integer_Ops.h Character_Ops.h Input_Output.h
+	gcc -c  G--_Language.c
+
+clean :
+	rm -f *.o  G--_Language core
