@@ -3,40 +3,30 @@
 #include "Character_Ops.h"
 #include "Input_Output.h"
 
+#define memblock char
+
 extern int cmp_value;
 extern int modulo;
 
-void main(void){
-    static int result;
-    static int A;
-    static int B;
-    static char c;
-    
+void main(void){    
     put_str("\n=================\n");
     put_str(" welcome to G--! \n");
     put_str("=================\n\n");
 
-    put_str("please enter a string size(single digit):");
-    get_c(&c);
-    a2i(c,&A);
+    /*
+    This code is 10 * 2 using predefined data
+    blocks and type casting. this is a proof of
+    concept, as I am going to remove the type
+    casting from everywhere in the code to
+    create to make G-- an untyped language
+    where everything is void
+    */
 
-
-    char str[A];
-    put_str("please enter a string with size ");
-    put_int(A);
-    put_c(':');
-    get_str(&(str[0]),A);
-    put_str(&(str[0]));
-    put_c('\n');
-
-    
-    
-    
-/*
-    get_c(&cA);
-    put_c(cA);
-    put_c('\n');
-*/
+    memblock MemoryBlock[100];
+    set((int *)&(MemoryBlock[3]),10);
+    set((int *)&(MemoryBlock[7]), 2);
+    mul((int)MemoryBlock[3],(int)MemoryBlock[7],(int *)&(MemoryBlock[11]));
+    put_int((int)(MemoryBlock[11]));
 }
 
 
