@@ -23,15 +23,16 @@ extern int modulo;
 
 /*
 function setc
-sets a value to a character variable
+sets a character pointed to by LHS to a specified value (RHS)
 */
 void setc(char *LHS,char RHS){
-    (((*LHS)>>CHR>>CHR>>CHR>>CHR>>CHR>>CHR>>3)&0x1) ? 1 : ({goto poszero_loop;});
-negzero_loop:
+    (((*LHS)>>CHR>>CHR>>CHR>>CHR>>CHR>>CHR>>3)&0x1) ? 1 : ({goto poszero_loop;}); // check sign bit
+negzero_loop: // set negative number to zero
     *LHS ? 1 : ({goto set;});
     (*LHS)++;
     goto negzero_loop;
-poszero_loop:
+// will only go through poszero loop once if already set negative number to zero
+poszero_loop: // set positive number to zero
     *LHS ? 1 : ({goto set;});
     (*LHS)--;
     goto poszero_loop;
