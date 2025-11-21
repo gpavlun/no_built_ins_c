@@ -15,6 +15,7 @@ div() ---> divides two numbers
 #include "Command_Calls.h"
 // necessary to use err()
 #define INT 4
+#define INT_NEG_SHIFT 31
 int cmp_value;
 int modulo;
 
@@ -25,7 +26,7 @@ sets the variable on the left to the value on the right.
 Same as 'V = #'
 */
 void set(int *LHS,int RHS){
-    (((*LHS)>>INT>>INT>>INT>>INT>>INT>>INT>>3)&0x1) ? 1 : ({goto poszero_loop;});
+    (((*LHS)>>INT_NEG_SHIFT)&0x1) ? 1 : ({goto poszero_loop;});
 negzero_loop:
     *LHS ? 1 : ({goto set;});
     (*LHS)++;
