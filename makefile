@@ -5,7 +5,7 @@
 #
 
 G--_Language :  Command_Calls.h Integer_Ops.o Character_Ops.o Input_Output.o G--_Language.o
-	gcc  Integer_Ops.o Character_Ops.o Input_Output.o G--_Language.o -o  G--_Language
+	gcc  Integer_Ops.o Character_Ops.o Input_Output.o Command_Calls.o G--_Language.o -o  G--_Language
 
 Command_Calls.o : Command_Calls.o Command_Calls.h
 	gcc -c Command_Calls.c
