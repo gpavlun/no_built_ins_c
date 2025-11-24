@@ -26,7 +26,8 @@ void main(void){
     set((int *)&(MemoryBlock[3]),10);
     set((int *)&(MemoryBlock[7]), 2);
     mul((int)MemoryBlock[3],(int)MemoryBlock[7],(int *)&(MemoryBlock[11]));
-    put_int((int)(MemoryBlock[11]));
+    put_int((int)(MemoryBlock[11])); 
+    // print the result using our integer printing function
 }
 
 
